@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: mic-stock-service
+  data:
+    mongodb:
+      uri: mongodb://localhost
+      database: stock
+      auto-index-creation: true
+    redis:
+      host: localhost
+      port: 6379
+
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      acks: all
+      properties:
+        retries: 100
+        retry.backoff.ms: 1000
+        '[schema.registry.url]': http://localhost:8081
+
+    consumer:
+      group-id: "stock-group-1"
+      bootstrap-servers: localhost:9092
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      properties:
+        '[schema.registry.url]': http://localhost:8081
+        '[specific.avro.reader]': true
+  cache:
+    type: redis
+    redis:
+      time-to-live: 1200000
+
+app:
+  api:
+    base-url: /api/v1
+  kafka-listener:
+    product-create-event: product-created-v1
+    product-deleted-event: product-deleted-v1
+server:
+  port: 9090
