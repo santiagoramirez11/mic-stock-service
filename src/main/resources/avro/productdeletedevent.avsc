@@ -1,0 +1,11 @@
+{
+  "namespace": "com.banreservas.product.avro.v1",
+  "type": "record",
+  "name": "ProductDeletedEventV1",
+  "fields": [
+    {
+      "name": "id",
+      "type": "string"
+    }
+  ]
+}
