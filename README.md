@@ -18,6 +18,8 @@ Stock management microservice in the stock system. Built with Spring Boot + WebF
 - OpenAPI 3 (Swagger UI)
 - MapStruct
 
+See more in the **[Technology Justification Page](docs/technology.md)**
+
 ---
 
 ## 📚 Project Architecture
@@ -38,6 +40,25 @@ Stock management microservice in the stock system. Built with Spring Boot + WebF
 
 ## 📚 Project Flow
 <img src="docs/architecture/Flow.png" alt="Flow">
+
+---
+
+## 🔄 Design Patterns and Principles Applied
+
+- Service Layer Pattern.
+- Repository Pattern.
+- Builder Pattern.
+- Observer Pattern.
+- DTO (Data Transfer Object) Pattern.
+- Mapper Pattern.
+- Reactive Programming.
+- Singleton Pattern.
+- Factory Pattern.
+- Strategy Pattern.
+- Proxy Pattern.
+- Template Method Pattern.
+
+See more in the **[Design Patterns and Principles Page](docs/design-patterns.md)**
 
 ---
 
@@ -99,7 +120,7 @@ mvn spring-boot:run
 The application will be available at http://localhost:9090
 
 💡 Key variables in `application.yml`:
-- MongoDB URI: `mongodb://mongo:27017/product`
+- MongoDB URI: `mongodb://mongo:27017/stock`
 - Kafka Bootstrap Servers: `kafka:9092`
 - Schema Registry URL: `http://schema-registry:8081`
 - Redis Host: `redis`
@@ -107,3 +128,6 @@ The application will be available at http://localhost:9090
 🧪 Testing
 - Unit tests with JUnit 5.
 - Kafka and MongoDB integration tests using Testcontainers.
+
+
+---
