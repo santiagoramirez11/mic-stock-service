@@ -37,6 +37,9 @@ spring:
 app:
   api:
     base-url: /api/v1
+  bindings:
+    topics:
+      '[com.banreservas.micstockservice.avro.v1.StockAdjustedEventV1]': stock-adjusted-v1
   kafka-listener:
     product-create-event: product-created-v1
     product-deleted-event: product-deleted-v1

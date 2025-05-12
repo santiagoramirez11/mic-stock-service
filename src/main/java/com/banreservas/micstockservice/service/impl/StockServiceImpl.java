@@ -4,9 +4,11 @@ import com.banreservas.micstockservice.model.MovementType;
 import com.banreservas.micstockservice.model.Stock;
 import com.banreservas.micstockservice.model.StockMovement;
 import com.banreservas.micstockservice.repository.StockRepository;
+import com.banreservas.micstockservice.service.StockEventPublisherService;
 import com.banreservas.micstockservice.service.StockMovementService;
 import com.banreservas.micstockservice.service.StockService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -20,6 +22,8 @@ public class StockServiceImpl implements StockService {
     private final StockRepository stockRepository;
 
     private final StockMovementService stockMovementService;
+
+    private final StockEventPublisherService stockEventPublisherService;
 
     @Override
     @Cacheable(value = "stock", key = "#productId", unless = "#result == null")
@@ -38,9 +42,11 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
+    @CacheEvict(value = "stock", key = "#stock.productId")
     public Mono<Stock> adjustStock(Stock stock, StockMovement stockMovement) {
         return stockMovementService.createStockMovement(stockMovement)
-                .flatMap(adjustFunction(stock));
+                .flatMap(adjustFunction(stock))
+                .flatMap(adjustedStock -> stockEventPublisherService.publishAdjustStockEvent(adjustedStock, stockMovement));
     }
 
     private Function<StockMovement, Mono<Stock>> adjustFunction(Stock stock) {

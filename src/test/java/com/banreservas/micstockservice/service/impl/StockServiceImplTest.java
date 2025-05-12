@@ -4,6 +4,7 @@ import com.banreservas.micstockservice.model.MovementType;
 import com.banreservas.micstockservice.model.Stock;
 import com.banreservas.micstockservice.model.StockMovement;
 import com.banreservas.micstockservice.repository.StockRepository;
+import com.banreservas.micstockservice.service.StockEventPublisherService;
 import com.banreservas.micstockservice.service.StockMovementService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +25,9 @@ class StockServiceImplTest {
 
     @Mock
     private StockMovementService stockMovementService;
+
+    @Mock
+    private StockEventPublisherService stockEventPublisherService;
 
     @InjectMocks
     private StockServiceImpl stockService;
@@ -84,13 +88,21 @@ class StockServiceImplTest {
 
         StockMovement stockMovement = StockMovement.builder()
                 .id("435235")
-                .productId("asdf-324-1234")
+                .productId("123-325")
                 .quantity(12)
                 .type(MovementType.IN)
                 .build();
 
+        var updatedStock = Stock.builder()
+                .id("asdf-ase234-435353")
+                .productId("123-325")
+                .quantity(22)
+                .build();
+
         when(stockMovementService.createStockMovement(stockMovement)).thenReturn(Mono.just(stockMovement));
-        when(stockRepository.save(any(Stock.class))).thenReturn(Mono.just(stock));
+        when(stockRepository.save(any(Stock.class))).thenReturn(Mono.just(updatedStock));
+        when(stockEventPublisherService.publishAdjustStockEvent(any(Stock.class), any(StockMovement.class)))
+                .thenReturn(Mono.just(updatedStock));
 
         StepVerifier.create(stockService.adjustStock(stock, stockMovement))
                 .expectNextMatches(adjustedStock -> adjustedStock.getQuantity() == 22)
@@ -98,5 +110,6 @@ class StockServiceImplTest {
 
         verify(stockMovementService, times(1)).createStockMovement(stockMovement);
         verify(stockRepository, times(1)).save(any(Stock.class));
+        verify(stockEventPublisherService, times(1)).publishAdjustStockEvent(any(Stock.class), any(StockMovement.class));
     }
 }

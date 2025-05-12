@@ -19,6 +19,7 @@ public interface StockDtoMapper {
 
     @Mapping(target = "type", source = "movementType")
     @Mapping(target = "timestamp", expression = "java(java.time.Instant.now())")
+    @Mapping(target = "id", ignore = true)
     StockMovement toStockMovement(AdjustStockRequestDto adjustStockRequestDto);
 
     MovementHistoryItemDto toMovementHistoryItemDto(StockMovement stockMovement);
