@@ -40,5 +40,29 @@ app:
   kafka-listener:
     product-create-event: product-created-v1
     product-deleted-event: product-deleted-v1
+  security:
+    admin:
+      username: admin
+      password: admin123
+    roles:
+      - USER
+      - ADMIN
+      - ACTUATOR
+    rules:
+      - path: /api/v1/stock
+        method: GET
+        roles: [ USER, ADMIN ]
+      - path: /api/v1/stock
+        method: POST
+        roles: [ ADMIN ]
+      - path: /actuator
+        method: GET
+        roles: [ ACTUATOR ]
+      - path: /actuator/**
+        method: GET
+        roles: [ ACTUATOR ]
+    token:
+      secret: testing-secret-passwordtesting-secret-passwordtesting-secret-password
+      expiration-time: 3600000
 server:
   port: 9090

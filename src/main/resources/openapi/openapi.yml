@@ -8,6 +8,69 @@ servers:
   - url: http://localhost:8080/api/v1
 
 paths:
+  /auth/login:
+    post:
+      tags:
+        - ServiceAuth
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthenticationRequest'
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationResponse'
+        '401':
+          description: Invalid credential
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginCredentialErrorResponse'
+  /auth/register:
+    post:
+      summary: Register a new user
+      tags:
+        - ServiceAuth
+      operationId: register
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistrationRequest'
+      responses:
+        '201':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Request contains incorrect syntax or cannot be processed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 400
+                title: "invalid-request"
+                detail: "Invalid values sent in the request"
+        '409':
+          description: Username already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 409
+                title: "conflict"
+                detail: "Username already exists"
   /stock/adjust:
     post:
       summary: Adjust stock
@@ -166,3 +229,64 @@ components:
         detail:
           description: "A description of the error"
           type: string
+    AuthenticationRequest:
+      required:
+        - password
+        - username
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    AuthenticationResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        tokenType:
+          type: string
+        expiresIn:
+          type: integer
+    LoginCredentialErrorResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+    UserRegistrationRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          description: The unique username of the user
+          minLength: 4
+          maxLength: 50
+          example: johndoe
+        password:
+          type: string
+          description: The password of the user
+          example: P@ssw0rd
+        roles:
+          type: array
+          items:
+            type: string
+          description: The roles assigned to the user
+          example: [ "USER" ]
+      required:
+        - username
+        - password
+    UserResponse:
+      type: object
+      properties:
+        username:
+          type: string
+          description: The unique username of the user
+          example: johndoe
+        roles:
+          type: array
+          items:
+            type: string
+          description: The roles assigned to the user
+          example: [ "USER" ]
