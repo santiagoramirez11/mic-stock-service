@@ -1,0 +1,19 @@
+{
+  "namespace": "com.banreservas.micstockservice.avro.v1",
+  "type": "record",
+  "name": "StockAdjustedEventV1",
+  "fields": [
+    {
+      "name": "productId",
+      "type": "string"
+    },
+    {
+      "name": "adjustedQuantity",
+      "type": "int"
+    },
+    {
+      "name": "finalQuantity",
+      "type": "int"
+    }
+  ]
+}
