@@ -7,9 +7,13 @@ info:
 servers:
   - url: http://localhost:8080/api/v1
 
+security:
+  - bearerAuth: [ ]
+
 paths:
   /auth/login:
     post:
+      summary: Login user and get access token
       tags:
         - ServiceAuth
       operationId: login
@@ -290,3 +294,8 @@ components:
             type: string
           description: The roles assigned to the user
           example: [ "USER" ]
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -104,6 +104,10 @@ cd mic-productservice
 ```bash
 mvn clean install
 ```
+or use the mvn wrapper:
+```bash
+.\mvnw clean install
+```
 
 3. Start the infrastructure:
 
@@ -111,7 +115,7 @@ mvn clean install
 docker-compose up -d
 ```
 
-4Run the microservice:
+4. Run the microservice:
 
 ```bash
 mvn spring-boot:run
@@ -125,9 +129,16 @@ The application will be available at http://localhost:9090
 - Schema Registry URL: `http://schema-registry:8081`
 - Redis Host: `redis`
 
+---
+## 🧪 Testing
 🧪 Testing
 - Unit tests with JUnit 5.
 - Kafka and MongoDB integration tests using Testcontainers.
+- Mocking with Mockito.
+- WebFlux testing with WebTestClient.
+- Security tests with JWT.
+
+For more details on testing strategies, see the [Testing Documentation](docs/testing/testing.md).
 
 ---
 
@@ -216,3 +227,11 @@ curl -X GET http://localhost:9090/api/v1/stock \
 ```
 
 See more about security applied in the **[Security Page](docs/security/security.md)**
+
+---
+## 📜 API Documentation
+🌍 Swagger UI
+Access to interactive documentation:
+```bash
+https://santiagoramirez11.github.io/mic-stock-service/
+```
